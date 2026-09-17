@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="ja">
+    <head>
+        <script type="text/javascript" id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+        <meta charset="utf-8" />
+        <title>MoE Router & Clustering</title>
+        <style type="text/css">
+            p
+            {
+                padding-left: 2em;
+            }
+           .margin-abstract {
+               margin-left: 60px; /* 左マージンを広くする */
+               margin-right: 60px; /* 右マージンを広くする */
+           }
+        </style>
+    <style>
+        .styleRef { 
+            text-indent: -40px; /* 最初の行の字下げを逆方向に */
+            margin-left: 10px; /* 2行目以降の字下げを調整 */
+            ul {
+                  list-style-type: none; /* 箇条書き記号を非表示 */
+                  padding-left: 40px; /* 全体の左余白 */
+            }
+            li {
+            }
+        }
+    </style>
+    <style>
+        .styleBullet { 
+            text-indent: -20px; /* 最初の行の字下げを逆方向に */
+            margin-left: 30px; /* 2行目以降の字下げを調整 */
+            ul {
+                  list-style-type: none; /* 箇条書き記号を非表示 */
+                  padding-left: 40px; /* 全体の左余白 */
+            }
+            li {
+            }
+        }
+    </style>
+<style>
+.container {
+  display: flex;
+  flex-wrap: wrap;
+}
+.column {
+  flex: 0.50%; /* 幅を50%に設定して2列に */
+  box-sizing: border-box;
+  padding: 10px;
+}
+</style>
+
+    </head>
+    <body>
+        <h1><center>MoE Router & Clustering</center></h1>
+
+<center><img src="images/moe_clustering.svg"></center>
+
+<p>
+\[
+\begin{array}{l}
+\text{MoE:　グループで挑戦するクイズ番組に参加するグループ} \\
+\text{エキスパート：　グループのメンバー (得意な分野が異なる)} \\
+\text{ルーター：　問題ごとに回答するメンバーを選ぶ人→ 問題をクラスタリングしている}
+\end{array}
+\]
+</p>
+
+<h3>Towards Understanding the Mixture-of-Experts Layer in Deep Learning (NeurIPS 2022)</h3>
+<p>
+「ルーター（ゲート）は、入力データの背後にある『クラスター中心（特徴）』を学習する役割を担っており、複雑な問題を個々のエキスパートが解決しやすいよう、クラスタリング（データ分割）問題として処理している」 というメカニズムを数学的に初めて証明した。
+</p>
+
+<h3><a href="https://arxiv.org/abs/2207.09094">MoEC: Mixture of Expert Clusters</a> (2022)</h3>
+<p>
+ルーティング時に「エキスパート自体をクラスタリング（グループ化）する」制約を加えることで、データの疎性を解消する手法（MoEC）を提案した。
+</p>
+
+<h3>Tight Clusters Make Specialized Experts (2025年)</h3>
+
+<p>
+ルーティングを完全に「クラスタリングの最適化問題」として再定式化し、入力空間を適応的に変換してトークンとエキスパートを高精度にマッチングする「ACルーター（Adaptive Clustering Router）」を提案している。
+</p>
+
+    </body>
+</html>
