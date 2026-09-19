@@ -31,8 +31,7 @@
 </p>
 
 <p>
-　MLP と MoE<br>
-　・MLP がうまく学習できる場合には、意図せず MoE っぽい構造になることがあるらしい･･･
+　<a href="https://boyoyon.github.io/Somewhat_Similar/data/moe_router_policy.html">MoEルーターと強化学習エージェントのポリシー</a>
 </p>
 
 <h3>か</h3>
@@ -43,7 +42,7 @@
 </p>
 
 <p>
-　逆強化学習と心の理論
+　<a href="https://boyoyon.github.io/Somewhat_Similar/data/irl_tom.html">逆強化学習と心の理論</a>
 </p>
 
 <p>
