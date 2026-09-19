@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="ja">
+    <head>
+        <script type="text/javascript" id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+        <meta charset="utf-8" />
+        <title>MoE Router & RL Agent's Policy</title>
+        <style type="text/css">
+            p
+            {
+                padding-left: 2em;
+            }
+           .margin-abstract {
+               margin-left: 60px; /* 左マージンを広くする */
+               margin-right: 60px; /* 右マージンを広くする */
+           }
+        </style>
+    <style>
+        .styleRef { 
+            text-indent: -40px; /* 最初の行の字下げを逆方向に */
+            margin-left: 10px; /* 2行目以降の字下げを調整 */
+            ul {
+                  list-style-type: none; /* 箇条書き記号を非表示 */
+                  padding-left: 40px; /* 全体の左余白 */
+            }
+            li {
+            }
+        }
+    </style>
+    <style>
+        .styleBullet { 
+            text-indent: -20px; /* 最初の行の字下げを逆方向に */
+            margin-left: 30px; /* 2行目以降の字下げを調整 */
+            ul {
+                  list-style-type: none; /* 箇条書き記号を非表示 */
+                  padding-left: 40px; /* 全体の左余白 */
+            }
+            li {
+            }
+        }
+    </style>
+<style>
+.container {
+  display: flex;
+  flex-wrap: wrap;
+}
+.column {
+  flex: 0.50%; /* 幅を50%に設定して2列に */
+  box-sizing: border-box;
+  padding: 10px;
+}
+</style>
+
+    </head>
+    <body>
+        <h1><center>MoE ルーターと強化学習エージェントのポリシー</center></h1>
+
+<center><img src="images/moe_router_policy.svg"></center>
+
+<p>
+\[
+\begin{array}{l}
+\textbf{・ 入力によって確率分布を切り換える<br>} \\
+\textbf{・ 切り替えた確率分布に従って、何かを選ぶ<br>}\\
+\textbf{ところが似ている気がする・・・}
+\end{array}
+\]
+</p>
+
+AIモードに聞いてみた。
+
+<p>
+MoEのルーターと強化学習エージェントのポリシーは似ていない？
+</p>
+
+(AIモード)
+<p>
+MoE（Mixture of Experts）のルーターと、強化学習（RL）エージェントのポリシーは、概念的にも数学的にも非常に似ています。
+
+</p><p>
+
+どちらも「現在の状態（入力）に応じて、最も高い報酬（成果）が得られるアクション（専門家）を確率的に選択する」という条件付きの意思決定メカニズムだからです。
+
+</p><p>
+
+\[
+\begin{array}{l | l | l}
+\hline
+& \textbf{MoEのルーター} & \textbf{強化学習エージェントのポリシー} \\
+\hline
+\textbf{役割} & \text{入力トークンを適切なエキスパートに割り当てる} & \text{環境の「状態」に応じて最適な「行動」を選ぶ
+}\\
+\hline
+\textbf{数理モデル} & \text{入力 x に対する各エキスパートの選択確率分布 } & \text{状態 } s \text{ に対する各行動の選択確率分布 } \\
+
+& P(\text{expert} \mid x)  & \pi(a \mid s) \\
+\hline
+\textbf{目的} & \text{ネットワーク全体の損失（Loss）の最小化} & \text{累積報酬（Return）の最大化} \\
+\hline
+\end{array}
+\]
+
+</p>
+
+<p>
+<div class="styleBullet">
+<ul><li>
+1.　離散的な選択問題（Discrete Choice）<br>
+MoEのルーター（特にTop-kルーター）は、複数の離散的な選択肢から少数のエキスパートを選び出します。これは強化学習における「離散的な行動空間（Discrete Action Space）」から行動を選択するポリシー（方策）と全く同じ構造です。
+
+</li><br><li>
+
+2. 実際に強化学習でルーターを訓練する試みもある初期のMoEや一部の応用研究では、ルーターの選択が「微分不可能（離散的でグラディエントが通らない）」になる問題を解決するために、REINFORCEアルゴリズムなどの強化学習の手法を使ってルーターを訓練するアプローチが実際に取られています。
+</li></ul></div>
+</p>
+
+実務・実装における3つの違い
+
+<p>
+本質は似ていますが、近年の大規模言語モデル（LLM）などで使われる標準的なMoEルーターと、一般的な強化学習ポリシーにはいくつか異なる点があります。
+</p>
+
+　微分可能性と学習効率
+
+<p>
+現在の多くのMoE（例：DeepSeekやMixture of Expertsの標準的な実装）では、<strong><span style="color:magenta;">強化学習を使わず、Softmax関数とロードバランシング損失（補助損失）を導入</span></strong>することで、通常の誤差逆伝播法（Backpropagation）でエンドツーエンドに直接学習できるように工夫されています。<strong><span style="color:magenta;">強化学習は学習の収束が不安定なため</span></strong>、効率を重視してこの形が主流になっています。
+</p>
+
+　報酬の即時性
+
+<p>
+強化学習は「数ステップ先の未来の報酬」を考慮して動くことが多い（<strong><span style="color:magenta;">遅延報酬</span></strong>）のに対し、MoEのルーターは基本的に「そのトークンにおけるそのレイヤーでの最適な割り当て」という<strong><span style="color:magenta;">即時的な最適化</span></strong>（Multi-armed Banditに近い性質）で動きます。
+</p>
+
+　キャパシティ制約（ロードバランシング）
+
+<p>
+<strong><span style="color:magenta;">強化学習のポリシーは、特定の強い行動だけをひたすら選び続けても問題ありません。しかしMoEのルーターの場合、特定のエキスパートに処理が集中するとハードウェアの計算効率が落ちる（エキスパート崩壊）</span></strong>ため、「全員に均等に仕事を振り分ける」という強い制約（バイアス）を課されて学習します。
+</p>
+
+
+    </body>
+</html>
