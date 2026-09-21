@@ -14,6 +14,8 @@
 
 <h4>・<a href="https://boyoyon.github.io/Somewhat_Similar/data/moe_router_clustering.html">クラスタリングと MoE のルーティング</a></h4>
 
+<img src="data/images/moe_clustering.svg">
+
 <p>
 　MoE:　グループで挑戦するクイズ番組に参加するグループ<br>
 　エキスパート：　グループのメンバー (得意な分野が異なる)<br>
@@ -21,7 +23,9 @@
 　　　　　　　→ 問題をクラスタリングする
 </p>
 
-<img src="data/images/moe_clustering.svg">
+<h4>・　<a href="https://boyoyon.github.io/Somewhat_Similar/data/irl_tom.html">逆強化学習と心の理論</a></h4>
+
+<img src="data/images/irl_tom.svg">
 
 <h3>あ</h3>
 
@@ -60,7 +64,7 @@
 <h3>さ</h3>
 
 <p>
-　残差ネットワークと微分方程式
+　<a href="https://boyoyon.github.io/Somewhat_Similar/data/resnet_ode.html">残差ネットワークと微分方程式</a>
 </p>
 
 <h3>た</h3>
