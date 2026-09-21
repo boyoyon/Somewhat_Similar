@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ja">
+    <head>
+        <script type="text/javascript" id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+        <meta charset="utf-8" />
+        <title>残差ネットワークと常微分方程式</title>
+        <style type="text/css">
+            p
+            {
+                padding-left: 2em;
+            }
+           .margin-abstract {
+               margin-left: 60px; /* 左マージンを広くする */
+               margin-right: 60px; /* 右マージンを広くする */
+           }
+        </style>
+    <style>
+        .styleRef { 
+            text-indent: -40px; /* 最初の行の字下げを逆方向に */
+            margin-left: 10px; /* 2行目以降の字下げを調整 */
+            ul {
+                  list-style-type: none; /* 箇条書き記号を非表示 */
+                  padding-left: 40px; /* 全体の左余白 */
+            }
+            li {
+            }
+        }
+    </style>
+    <style>
+        .styleBullet { 
+            text-indent: -20px; /* 最初の行の字下げを逆方向に */
+            margin-left: 30px; /* 2行目以降の字下げを調整 */
+            ul {
+                  list-style-type: none; /* 箇条書き記号を非表示 */
+                  padding-left: 40px; /* 全体の左余白 */
+            }
+            li {
+            }
+        }
+    </style>
+<style>
+.container {
+  display: flex;
+  flex-wrap: wrap;
+}
+.column {
+  flex: 0.50%; /* 幅を50%に設定して2列に */
+  box-sizing: border-box;
+  padding: 10px;
+}
+</style>
+
+    </head>
+    <body>
+        <h1><center>残差ネットワークと常微分方程式</center></h1>
+
+<center><img src="images/resnet_ode.svg"></center>
+
+<h3><a href="https://arxiv.org/abs/1806.07366">Neural Ordinary Differential Equations</a> （NeurIPS 2018)</h3>
+
+<p>
+ニューラルネットワークの層の概念を「離散」から「連続」へと拡張し、隠れ状態のダイナミクスを常微分方程式（ODE）として定式化した深層学習フレームワーク。
+</p>
+
+<p>
+従来のネットワークでは、あらかじめ定義された層の数だけ順伝播（Forward）の計算を行うが、Neural ODEでは数値微分方程式ソルバー（ODE Solver）（ルンゲ＝クッタ法など）に計算を丸投げする。
+</p>
+
+<p>
+<div class="styleBullet">
+<ul><li>
+・<strong>順伝播（予測）</strong><br>
+初期値（入力データ） \(y(t_0)\) から、ODEソルバーを使って指定の時刻 \(t_1\) までの微分方程式を解き、最終的な出力 \(y(t_1)\) を得ます。
+</li><br><li>
+・<strong>逆伝播（学習）:</strong><br>
+パラメータ θ の更新には、Adjoint法（随伴変数法） という数学的アプローチが使われます。これにより、途中の計算過程（グラフ）をすべてメモリに保存しておく必要がなくなり、メモリ消費量を劇的に抑えて（ O(1) のメモリ効率） 学習を進めることができます。
+</li></ul></div>
+</p>
+
+    </body>
+</html>
