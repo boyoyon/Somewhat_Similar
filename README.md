@@ -90,7 +90,7 @@
 <h3>は</h3>
 
 <p>
-　PINNs と知識蒸留<br>
+　<a href="https://boyoyon.github.io/Somewhat_Similar/data/kd_pinns.html">PINNs と知識蒸留</a><br>
 　・物理損失を教師モデルとみなすと似ている気がする・・・
 </p>
 
