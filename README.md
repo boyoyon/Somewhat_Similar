@@ -54,7 +54,8 @@
 </p>
 
 <p>
-　言語モデルと(強化学習)エージェント
+　<a href="https://boyoyon.github.io/Somewhat_Similar/data/llm_agent.html">
+言語モデルと(強化学習)エージェント</a>
 </p>
 
 <p>
