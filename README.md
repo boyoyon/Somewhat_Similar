@@ -71,7 +71,7 @@
 <h3>た</h3>
 
 <p>
-　畳み込みと相関
+　<a href="https://boyoyon.github.io/Somewhat_Similar/data/correlation_convolution.html">畳み込みと相関</a>
 </p>
 
 <p>
@@ -83,6 +83,10 @@
 </p>
 
 <h3>な</h3>
+
+<p>
+　<a href="https://boyoyon.github.io/Somewhat_Similar/data/things_that_are_similar_to_each_other_are_similar.html">似ているものと似ているものは似ている？</a>
+</p>
 
 <p>
 　Non-Local Means と Self-Attention
