@@ -144,7 +144,7 @@
 
 <p>
 システムの応答が時間や場所によって変わらない場合、シフト不変性がある (Shift-Invariant) という。<br>
-※ 時系列の場合、シフト不変性があることを時不変 (Time-Invariant) があるという。
+※ 時系列の場合、シフト不変性があることを時不変性 (Time-Invariant) があるという。
 </p>
 
 <p>
@@ -230,6 +230,25 @@
 </p>
 
 <center><img src="images/impulse_response5.svg"></center>
+
+
+工学系では、<strong>Shift Invariant</strong>、<strong>Time Invariant</strong> と言うけど、AI関連では異なる模様<br>
+(AIモードによると･･･)
+<p>
+
+\[
+\begin{array}{l|l|l}
+\textbf{分野} & \textbf{Shift Invariance (シフト不変性)} & \textbf{Translation Equivariance (並進同変性)} \\
+\hline
+\textbf{工学} & \text{入力が移動すると、出力も同じように移動する性質。} & \text{-} \\
+\hline
+\textbf{AI} & \text{入力が移動しても、出力は全く変わらない性質。} & \text{入力が移動すると、出力も同じように移動する性質。} \\
+& \text{[画像認識]} & \text{[物体検出]} \\
+& \text{　物体がどこにあっても同じモノと認識} & \text{　物体が移動すると検出枠も同じく移動}
+\end{array}
+\]
+</p>
+
 
     </body>
 </html>
