@@ -89,7 +89,7 @@
 </p>
 
 <p>
-  <a href="https://boyoyon.github.io/Somewhat_Similar/data/nls_self_attention.html">Non-Local Means と Self-Attention</a>
+　<a href="https://boyoyon.github.io/Somewhat_Similar/data/nls_self_attention.html">Non-Local Means と Self-Attention</a>
 </p>
 
 <h3>は</h3>
