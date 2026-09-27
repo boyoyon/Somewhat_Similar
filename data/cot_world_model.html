@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="ja">
+    <head>
+        <script type="text/javascript" id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+        <meta charset="utf-8" />
+        <title>CoT と世界モデル</title>
+        <style type="text/css">
+            p
+            {
+                padding-left: 2em;
+            }
+           .margin-abstract {
+               margin-left: 60px; /* 左マージンを広くする */
+               margin-right: 60px; /* 右マージンを広くする */
+           }
+        </style>
+    <style>
+        .styleRef { 
+            text-indent: -40px; /* 最初の行の字下げを逆方向に */
+            margin-left: 10px; /* 2行目以降の字下げを調整 */
+            ul {
+                  list-style-type: none; /* 箇条書き記号を非表示 */
+                  padding-left: 40px; /* 全体の左余白 */
+            }
+            li {
+            }
+        }
+    </style>
+    <style>
+        .styleBullet { 
+            text-indent: -20px; /* 最初の行の字下げを逆方向に */
+            margin-left: 30px; /* 2行目以降の字下げを調整 */
+            ul {
+                  list-style-type: none; /* 箇条書き記号を非表示 */
+                  padding-left: 40px; /* 全体の左余白 */
+            }
+            li {
+            }
+        }
+    </style>
+<style>
+.container {
+  display: flex;
+  flex-wrap: wrap;
+}
+.column {
+  flex: 0.50%; /* 幅を50%に設定して2列に */
+  box-sizing: border-box;
+  padding: 10px;
+}
+</style>
+
+    </head>
+    <body>
+        <h1><center>CoT(思考の連鎖)と世界モデル</center></h1>
+<center><img src="images/cot_world_model.svg"></center>
+<center>出力する (手を出す、口を出す) 前に内省する (内部でシミュレーションする) ところが似ている気が･･･</center>
+<br>
+(AIモードの解説)
+<p>
+CoT（Chain of Thought: 思考の連鎖）と「世界モデル（World Model）」は、本質的な目的やアプローチは異なりますが、「予測を繰り返してシミュレーションを行う」という構造において非常に強い類似性を持っています。
+
+</p><p>
+
+大まかに言うと、CoTは「言語空間でのシミュレーション」であり、世界モデルは「物理空間（または抽象空間）でのシミュレーション」と捉えることができます。
+
+\[
+\begin{array}{l|l|l}
+
+\textbf{項目} & \textbf{CoT(思考の連鎖)} & \textbf{世界モデル} \\
+
+\hline
+
+\textbf{主な対象ドメイン} & \text{言語・論理・数理（テキストベース）} & \text{物理・空間・因果関係（映像・状態）} \\
+
+\hline
+
+\textbf{何をするか} & \text{次の「思考トークン（単語）」を予測し、} & \text{次の「世界の環境状態（映像や物理量）」} \\
+& \text{段階的に推論を進める} & \text{を予測する} \\
+\hline
+
+\textbf{主な機能} & \text{言語による自己対話・論理シミュレーション} & \text{環境の変化を先読みする「想像力」} \\
+
+& & \text{（シミュレータ）} \\
+
+\hline
+
+\textbf{活用方法} & \text{正確な計算や、複雑な文章問題の解決} & \text{ロボットの制御、自動運転、ゲームの攻略など}
+
+\end{array}
+\]
+</p>
+
+<br>
+
+<h3>どこが「似ている」のか？（共通点）<h3>
+
+<h4 style="padding-left:1em;">1. 「自己回帰的」に未来を先読みする構造</h4>
+<p>
+最大のスゴ味であり共通しているのは、「<strong><span style="color:magenta;">自分の出した出力を次の入力にして、未来を予測し続ける</span></strong>」という点です。
+<br>
+<div class="styleBullet">
+<ul><li>
+・<strong>CoT</strong><br>
+ 「Aだから次はB、Bだから次はC…」と、自分が生成したテキストを元に次のステップを予測します。
+</li><br><li>
+・<strong>世界モデル</strong><br>
+:「いまアクセルを踏んだから、1秒後の画面はこうなり、2秒後はこうなる…」と、自分の行動による環境の変化（デジタル箱庭）を脳内でシミュレートします。
+</li></ul></div>
+</p>
+
+<h4 style="padding-left:1em;">2. 「行動」に移す前に脳内でリハーサルする</h4>
+<p>
+どちらも、いきなり最終的な答え（または実際の行動）を出さず、内部で「中間プロセス」を挟むことで打率を上げようとします。人間がチェスで「こう動かしたら、相手はこう来て、その次は…」と頭の中で考えるプロセスそのものです。
+</p>
+
+<br>
+
+<h3>何が「違う」のか？（相違点）<h3>
+
+<h4 style="padding-left:1em;">1. 扱う対象（モダリティ）の違い</h4>
+<p>
+<div class="styleBullet">
+<ul><li>
+<strong>CoT</strong><br>
+あくまで人間の紡ぐ「<strong><span style="color:magenta;">言語（テキスト）</span></strong>」の確率的な並びをベースにしています。
+</li><br><li>
+<strong>世界モデル</strong><br>
+カメラ画像や物理的な位置、センサー情報など、言語化が難しい「<strong><span style="color:magenta;">物理世界のルールや因果関係</span></strong>」を内包しようとします。
+</li><ul></div>
+</p>
+
+<h4 style="padding-left:1em;">2. 目的の違い</h4>
+<p>
+<div class="styleBullet">
+<ul><li>
+<strong>CoT</strong><br>
+「LLMの出力精度（論理的な正しさ）を上げるため」に使われます。
+</li><br><li>
+<strong>世界モデル</strong><br>
+「AIエージェントが、現実世界で失敗（衝突など）をせずに効率よく学習・行動するため」に使われます。
+</li><ul></div>
+</p>
+
+<br>
+
+<h3>最近のトレンド：両者の融合</h3>
+
+<p>
+AI研究の最前線では、「これらは別物」ではなく、「<strong><span style="color:magenta;">CoTを世界モデルのパーツとして使う</span></strong>」、あるいは「<strong><span style="color:magenta;">LLM自体が一種の世界モデルを内包している</span></strong>」という見方が強まっています。
+
+</p><p>
+
+例えば、AIエージェントが自律的にタスクをこなす際、CoT（言語による計画）を使って「まず部屋の状況を確認して、次にゴミ箱を探そう」と頭の中で組み立て、世界モデル（物理的予測）を使って「これを動かしたら倒れるかもしれない」と予測する、といった連携が行われています。
+
+</p><p>
+
+結論として：アプローチする領域（言葉か、物理か）は違えど、「<strong><span style="color:magenta;">段階的な予測によって未来をシミュレーションし、意思決定の精度を上げる」というアーキテクチャの思想において、CoTと世界モデルは非常に親戚に近い関係</span></strong>だと言えます。
+</p>
+
+    </body>
+</html>
