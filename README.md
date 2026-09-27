@@ -68,6 +68,10 @@
 　<a href="https://boyoyon.github.io/Somewhat_Similar/data/resnet_ode.html">残差ネットワークと微分方程式</a>
 </p>
 
+<p>
+　<a href="https://boyoyon.github.io/Somewhat_Similar/data/cot_world_model.html">CoT(思考の連鎖)と世界モデル</a> 
+</p>
+
 <h3>た</h3>
 
 <p>
