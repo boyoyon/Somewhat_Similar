@@ -99,6 +99,9 @@
 <h3>は</h3>
 
 <p>
+　<a href="https://boyoyon.github.io/Somewhat_Similar/data/scree_plot_elbow_methid.html">PCA のスクリー・プロットと k-means のエルボー法グラフ</a><br>   
+</p>
+<p>
 　<a href="https://boyoyon.github.io/Somewhat_Similar/data/kd_pinns.html">PINNs と知識蒸留</a><br>
 　・物理損失を教師モデルとみなすと似ている気がする・・・
 </p>
