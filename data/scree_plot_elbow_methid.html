@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="ja">
+    <head>
+        <script type="text/javascript" id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+        <meta charset="utf-8" />
+        <title>PCAのスクリー・プロットとk-meansのエルボー法</title>
+        <style type="text/css">
+            p
+            {
+                padding-left: 2em;
+            }
+           .margin-abstract {
+               margin-left: 60px; /* 左マージンを広くする */
+               margin-right: 60px; /* 右マージンを広くする */
+           }
+        </style>
+    <style>
+        .styleRef { 
+            text-indent: -40px; /* 最初の行の字下げを逆方向に */
+            margin-left: 10px; /* 2行目以降の字下げを調整 */
+            ul {
+                  list-style-type: none; /* 箇条書き記号を非表示 */
+                  padding-left: 40px; /* 全体の左余白 */
+            }
+            li {
+            }
+        }
+    </style>
+    <style>
+        .styleBullet { 
+            text-indent: -20px; /* 最初の行の字下げを逆方向に */
+            margin-left: 30px; /* 2行目以降の字下げを調整 */
+            ul {
+                  list-style-type: none; /* 箇条書き記号を非表示 */
+                  padding-left: 40px; /* 全体の左余白 */
+            }
+            li {
+            }
+        }
+    </style>
+<style>
+.container {
+  display: flex;
+  flex-wrap: wrap;
+}
+.column {
+  flex: 0.50%; /* 幅を50%に設定して2列に */
+  box-sizing: border-box;
+  padding: 10px;
+}
+</style>
+
+    </head>
+    <body>
+        <h1><center>PCAのスクリー・プロットとk-meansのエルボー法</center></h1>
+
+<center><img src="images/scree_plot_elbow_method_graph.svg"></center>
+<p style="padding-left:4em;">
+PCA の Scree Plot: <a href="https://en.wikipedia.org/wiki/Principal_component_analysis">https://en.wikipedia.org/wiki/Principal_component_analysis</a><br>
+k-means の Elbow法グラフ： <a href="https://www.geeksforgeeks.org/machine-learning/elbow-method-for-optimal-value-of-k-in-kmeans/">Elbow Method for optimal value of k in KMeans</a><br>
+似ている･･･
+</p>
+
+<br>
+
+(AIモード解説)
+
+<h4 style="padding-left:1em;">PCA の Scree Plot</h4>
+
+<p>
+「スクリープロット（scree plot）」の scree（スクリー）とは、地質学の用語で「山の斜面にたまった岩屑（がんせつ）」や「がれ場（崩れ落ちた岩石がゴロゴロと積み重なった急斜面）」を意味します。
+</p>
+
+<p>
+このグラフは、各主成分の固有値（情報量・分散の大きさ）を大きい順に並べたものです。その形状が、「崖から崩れ落ちた岩石が、山の麓に緩やかに積み重なっている斜面」に見えることから、1966年に統計学者のレイモンド・キャッテル（Raymond Cattell）によって名付けられました
+</p>
+
+<p>
+スクリープロットを使った分析では、グラフの傾きが急激に下がったあと、平坦（なだらか）に変化する境界点を探します。<br>
+・<strong>崖（急斜面）</strong>:　情報量が大きく、分析に残すべき重要な主成分<br>
+・<strong>がれ場（緩斜面 / スクリー）</strong>:　 情報量が少なく、本質的ではない「誤差」や「ノイズ」の集まり
+
+</p>
+
+<h4 style="padding-left:1em;">k-means の Elbow 法</h4>
+
+<p>
+k-means法（k平均法）などのクラスタリングアルゴリズムにおいて、データをいくつのグループ（クラスター数 k）に分けるのが最も適切かを視覚的に判断するための代表的な手法です。
+</p>
+
+<p>
+グラフを描いたときに、「人間のひじ（Elbow）」のようにポキッと曲がる点があることからその名がつけられました。
+</p>
+
+<p>
+<strong>手順</strong>
+<div class="styleBullet">
+<ul><li>
+1. 複数のクラスター数（k = 1, 2, 3, 4...）で実際にクラスタリングを実行する。
+</li><br><li>
+2. 各 k における「クラスター内平方和（SSE / WCSS）」を計算する。<br>
+※SSE（Sum of Squared Errors）：各データ点から、それが所属するクラスターの中心点までの距離の2乗をすべて足し合わせたもの。
+</li><br><li>
+3. 横軸に「クラスター数 k」、縦軸に「SSE（誤差）」をとってグラフにプロットする。
+</li></ul></div>
+</p>
+
+<h4 style="padding-left:1em;">Scree Plot と Elbow 法グラフ</h4>
+
+<p>
+「スクリープロット」と「エルボー法のグラフ」は、見た目も本質的な考え方も非常によく似ています。
+</p>
+
+<p>
+どちらも統計学や機械学習において、「これ以上要素（主成分やクラスター）を増やしても効果が薄い、最適な境界点（コストパフォーマンスが良い点）」を視覚的に見つけ出すための手法だからです。
+</p>
+
+<p>
+グラフの形はそっくりですが、「何をプロットしているか（縦軸の意味）」が真逆になっています。
+
+\[
+\begin{array}{l | l | l}
+\textbf{項目} & \textbf{PCAのスクリープロット} & \textbf{k-meansのエルボー法グラフ} \\
+
+\hline
+
+\textbf{やりたいこと} & \text{データの次元を減らす} & \text{データをグループに分ける} \\
+
+\hline
+
+\textbf{横軸} & \text{主成分の番号} & \text{クラスターの数} \\
+
+\hline
+
+\textbf{縦軸} & \text{固有値(分散・情報量)} & \text{クラスタ内平方和} \\
+
+\hline
+
+\textbf{縦軸の性質} & \text{各主成分がもつ「価値」} & \text{クラスタリングの「損失・エラー」} \\
+&\text{(プラスの要素)} & \text{(マイナスの要素)}
+\end{array}
+\]
+
+</p>
+    </body>
+</html>
