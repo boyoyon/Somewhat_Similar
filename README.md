@@ -113,6 +113,7 @@
 <h3>ま</h3>
 <h3>や</h3>
 <h3>ら</h3>
+　<a href="https://boyoyon.github.io/Somewhat_Similar/data/perturbing the neurons in the ring attractor manifold.html">「リング・アトラクター多様体への摂動」と「左耳に冷水」</a><br>
 <h3>わ</h3>
 </body>
 </html>
