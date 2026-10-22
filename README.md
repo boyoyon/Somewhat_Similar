@@ -50,6 +50,9 @@
 </p>
 
 <p>
+　<a href="https://boyoyon.github.io/Somewhat_Similar/data/GAN_ActorCritic.html">GAN と Actor-Critic</a>
+</p>
+<p>
 　<a href="https://boyoyon.github.io/Somewhat_Similar/data/moe_router_clustering.html">クラスタリングと MoE のルーティング</a>
 </p>
 
