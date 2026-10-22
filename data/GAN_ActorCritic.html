@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="ja">
+    <head>
+        <script type="text/javascript" id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+        <meta charset="utf-8" />
+        <title>GAN と Actor Critic</title>
+        <style type="text/css">
+            p
+            {
+                padding-left: 3em;
+            }
+           .margin-abstract {
+               margin-left: 60px; /* 左マージンを広くする */
+               margin-right: 60px; /* 右マージンを広くする */
+           }
+        </style>
+    <style>
+        .styleRef { 
+            text-indent: -40px; /* 最初の行の字下げを逆方向に */
+            margin-left: 10px; /* 2行目以降の字下げを調整 */
+            ul {
+                  list-style-type: none; /* 箇条書き記号を非表示 */
+                  padding-left: 40px; /* 全体の左余白 */
+            }
+            li {
+            }
+        }
+    </style>
+    <style>
+        .styleBullet { 
+            text-indent: -20px; /* 最初の行の字下げを逆方向に */
+            margin-left: 30px; /* 2行目以降の字下げを調整 */
+            ul {
+                  list-style-type: none; /* 箇条書き記号を非表示 */
+                  padding-left: 40px; /* 全体の左余白 */
+            }
+            li {
+            }
+        }
+    </style>
+<style>
+.container {
+  display: flex;
+  flex-wrap: wrap;
+}
+.column {
+  flex: 0.50%; /* 幅を50%に設定して2列に */
+  box-sizing: border-box;
+  padding: 10px;
+}
+</style>
+
+    </head>
+    <body>
+        <h1><center>GAN と Actor Critic</center></h1>
+
+<p>
+誰もが似ていると思う GAN と Actor Critic の何がどう似ているかをAIモードに整理して貰った (ら、GAN と強化学習自体が似ていた･･･)。
+</p>
+
+<center><img src="images/GAN_ActorCritic.svg"></center>
+
+<h3>似ているところ</h3>
+
+<h4 style="padding-left:1em">１．「行動する側」 と 「評価する側」 の役割分担</h4>
+
+<p>
+どちらのアルゴリズムも、システムが 「<strong>実際にアウトプットを出すネットワーク</strong>」 と、「<strong>そのアウトプットが良いか悪いかを評価するネットワーク</strong>」 の2つに完全に役割が分かれています。その対応関係は以下の通りきれいに一致します。
+</p>
+
+<p><strong>Actor (アクター：役者) \(\simeq\) Generator (生成器)</strong></p>
+
+<p style="padding-left:4em">
+目的を達成するために、実際に「行動（Action）」や「データ（データ生成）」を出力する役割。
+
+</p>
+
+<p><strong>Critic (クリティック：批評家) \(\simeq\) Discriminator (識別器)</strong></p>
+
+<p style="padding-left:4em">
+出力されたものがどれくらい良いかを「評価」する役割。
+</p>
+
+<p style="padding-left:4em">
+<strong>Actor-Critic</strong><br>
+状態に対してその行動が将来どれくらい報酬（価値）を生むかを予測・評価する。
+</p>
+
+<p style="padding-left:4em">
+<strong>GAN</strong><br>
+入力されたデータが「本物（リアル）」か「偽物（アクターが作ったもの）」かを評価（識別）する。
+</p>
+
+<h4 style="padding-left:1em">2. 「評価のフィードバック」によってのみ、行動側が成長する</h4>
+
+<p>
+どちらのモデルも、Actor（Generator）は環境から直接正解を教えてもらうわけではありません。
+</p>
+
+<p>
+・ GAN: Generatorは「本物の画像そのもの」を見て学習するのではなく、Discriminatorの「今のは偽物っぽいぞ（勾配情報）」というフィードバックを頼りに、どうすれば騙せるかを学習します。
+</p>
+
+<p>
+・ Actor-Critic: Actorは「どの行動が100点満点か」を知りません。Criticが算出した「今の行動は予想より良かった／悪かった（方策勾配／TD誤差）」という評価フィードバックを受けて、自分の行動パターンを修正します。
+</p>
+
+<p>
+つまり、両者とも「<strong>評価側の目（評価基準）が肥えるにつれて、行動側の腕前も上がる</strong>」というブートストラップ的な進化プロセスを踏みます。
+</p>
+
+<h4 style="padding-left:1em">3. 動的な目標設定（移動するゴールポスト）</h4>
+
+<p>
+通常の教師あり学習（画像認識など）では、目指すべき「正解ラベル（ゴール）」は常に固定されています。しかし、Actor-CriticとGANでは、学習のゴールが常に動き続けます。
+</p>
+
+<p>
+・ GAN: Generatorが上手くなると、Discriminatorの識別基準もより厳しくアップデートされます（ゴールが動く）。
+</p>
+
+<p>
+・ Actor-Critic: Actorの行動が変わると、訪れる状態や得られる報酬の予測が変わるため、Criticの評価基準（価値関数）も常にアップデートされます（ゴールが動く）。
+</p>
+
+<p>
+この「一方が変わると他方の正解も変わる」という非定常性（Non-stationarity）を持つため、どちらも学習の初期設定やハイパーパラメータの調整が非常に繊細で、学習が不安定になりやすいという共通の弱点・特徴を持っています。<br>
+<br>
+・ GAN： モデル崩壊 (同じような画像しか生成しなくなる)<br>
+・ Actor-Critic： ポリシー崩壊 (同じ行動しかとらなくなる、ランダムな無駄な行動をとる)、報酬ハッキング (目的に沿わない報酬だけを稼ぐ行動をとる)
+</p>
+
+(蛇足)
+<p>
+　ゴールが動く → カリキュラム学習に似ている？<br>
+</p>
+(AIモード)
+<p>
+　「徐々に難しいゴールに挑む」という点で同じですが、そのアプローチが自動（共進化）か手動（設計）かという大きな違いがあります。
+<br><br>
+「GANやActor-Criticの『自動で動くゴールポスト』の動きを、カリキュラム学習の手法を使って人間が優しくコントロールし、学習を安定させる」という、両者のいいとこ取りをした研究（Self-Paced Learningなど）もたくさん行われています。
+</p>
+
+<p>
+「非監視下環境デザイン（Unsupervised Environment Design: UED）」や「オープンエンド型学習（Open-Ended Learning）」と呼ばれています。
+</p>
+
+<p>
+AI自身が自分にとって『ちょうどいい難易度の迷路』を自動生成して自習する仕組み（POETなどの環境自動生成手法）など、面白い発展形があります。<br>
+　　：
+</p>
+
+
+(長くなりそうなので、別途ヒアリングすることにした)
+
+<h4 style="padding-left:1em">4. 数学的・アルゴリズム的な共通性（停留点へのアプローチ）</h4>
+
+<p>
+最適化の視点で見ると、どちらも「片方の損失関数を最小化し、もう片方の損失関数を最大化する」というサドルポイント（鞍点・ゲーム理論のナッシュ均衡）を探す数学的構造を持っています。
+</p>
+
+<p>
+実際、模倣学習の文脈において、人間のお手本データから学習する「敵対的生成模倣学習（GAIL: Generative Adversarial Imitation Learning）」という手法では、Actor-Criticの仕組みをそのままGANの数式に変換して処理するアプローチがとられています。
+</p>
+
+<center><img src="images/IL.svg"></center>
+
+<h3>異なるところ</h3>
+
+<h4 style="padding-left:1em">1. 「時間（ステップ）」と「状態遷移」の有無</h4>
+
+<p>
+これが最も根本的なアルゴリズム上の違いです。
+</p>
+
+<p><strong>Actor-Critic（強化学習）</strong></p>
+
+<p style="padding-left:4em;">
+時間軸があり、自分の行動が未来に影響する
+<br><br>
+マルコフ決定過程（MDP）という時間的なつながりの中で動きます。Actorが「右に進む」という行動（Action）をとると、環境の「状態（State）」が変わり、未来に得られる報酬や次に取れる行動が変化します。つまり、「将棋の先読み」のように、現在の行動が未来の状態を左右する世界です。
+</p>
+
+<p><strong>GAN（生成モデル）</strong></p>
+
+<p style="padding-left:4em;">
+1発勝負であり、ステップの概念がない
+<br><br>
+GANのGeneratorのタスクは、ノイズ（乱数）から「1枚の完成した画像（またはデータ）」をパッと一瞬で作り出すことです。Generatorが特定のピクセルをどう描いたかが、次のピクセル生成に「環境の変化」として影響を及ぼすような、時間的な状態遷移の概念はありません。
+</p>
+
+<h4 style="padding-left:1em">2. 「環境（Environment）」というブラックボックスの存在</h4>
+
+<p>
+<strong>Actor-Critic: 制御できない「外部環境」が存在する</strong>
+</p>
+
+<p style="padding-left:4em;">
+ネットワークの外部に、ゲームのルールや物理法則といった「環境」が存在します。ActorやCriticは、環境がどう動くかの完全な数式（遷移確率）を知りません。実際に動いてみて、環境から返ってくる「状態」や「報酬」を観測しながら手探りで学習します。
+</p>
+
+<p>
+<strong>GAN: すべてがニューラルネットワーク内で完結する</strong>
+</p>
+
+<p style="padding-left:4em;">
+GANには外部の物理環境はありません。「本物のデータセット」と「Generator」「Discriminator」の3つだけで世界が閉じています。Discriminatorの評価（誤差）は微分可能（Differentiable）な数式としてGeneratorに直接フィードバック（バックプロパゲーション）されるため、環境を挟まないダイレクトな最適化が可能です。
+</p>
+
+(蛇足)
+
+<p>
+GAN の Discriminator を強化学習の環境とみなすような研究はない？
+</p>
+
+(AIモード)
+
+<p>
+GANの構造（Generator vs Discriminator）は、強化学習（RL）の「エージェントが環境からのフィードバック（報酬）を得て行動を最適化するプロセス」と本質的に高い数学的親和性を持っています。具体的には、以下のような代表的な研究分野や手法が確立されています
+</p>
+
+<p>
+<strong>逆強化学習（Inverse RL）との数学的等価性の証明</strong>
+</p>
+<p>
+2016年にChelsea Finnらの研究グループが発表した論文『A Connection between Generative Adversarial Networks, Inverse Reinforcement Learning, and Energy-Based Models』によって、GANと「最大エントロピー逆強化学習（MaxEnt IRL）」が本質的に等価（同じ数式で表せる）であることが証明されました。
+</p>
+
+<p>
+この発見により、<strong><span style="color:magenta;">GAN の Discriminator は「エージェントにとっての人工的な環境（報酬評価器）」そのものである</span></strong>ことが理論的に裏付けられました。
+</p>
+
+(蛇足)
+<p>
+(じゃあ　「2. 「環境（Environment）」というブラックボックスの存在」　は違いじゃないじゃん･･･)
+<br><br>
+(似ているのは、GAN と 強化学習 だった･･･Generator \(\simeq\)
+ エージェント、Discriminator \(\simeq\) 環境)
+
+</p>
+
+(AIモード)
+
+<p>
+
+近年の動向：GAN-RL連携と環境生成（Environment Generation）
+</p>
+
+<p>
+<strong>RELEVAGAN / ObjectiveGAN</strong><br>
+サイバーセキュリティ（ボットネット検出の回避）やレコメンドシステムにおいて、強化学習エージェントが攻撃や行動を仕掛ける先の「敵対的な環境」としてDiscriminatorを設定する研究です。
+</p>
+
+<p>
+<strong>環境ジェネレータ（Environment Generator）</strong><br>
+自動運転やロボティクスのシミュレーションにおいて、エージェントを訓練するための「リアルなステージ（環境）」そのものをGANで生成し、Discriminatorにそのステージの妥当性を評価させる特許や研究も存在します。
+</p>
+
+<p>
+このように、「Discriminatorを環境（報酬）とみなす」という視点は、思いつきのアイデアに留まらず、「敵対的模倣学習（GAIL）」や「逆強化学習（IRL）」の基盤として広く実用・研究化されているメジャーな領域です。
+</p>
+
+<h4 style="padding-left:1em">3. クリティック（評価側）の「評価基準」の違い</h4>
+
+<p>
+どちらも「Critic（批評家）」という役割を持っていますが、見ている対象が異なります。
+</p>
+
+<p>
+<strong>Actor-CriticのCritic: 「未来の予測（価値）」を評価する</strong>
+</p>
+
+<p style="padding-left:4em;">
+目の前の行動が本物か偽物かを見極めるのではなく、「現在の状態から、将来どれくらいのトータル報酬（スコア）が得られそうか」という未来の期待値（価値：Value）を予測・評価します。
+</p>
+
+<p>
+<strong>GANのDiscriminator（Critic）: 「本物（リアル）か偽物（フェイク）か」を評価する</strong>
+</p>
+
+<p style="padding-left:4em;">
+入力されたデータ（画像など）が、用意された本物のデータセットに含まれるものか、それともGeneratorが作った偽物（分布の外にあるもの）かを0〜1の確率で二値識別します（WGANなどでは文字通り「Critic」と呼ばれ、本物らしさのスコアを出力します）。
+</p>
+
+<h4 style="padding-left:1em">4. 最終的なアウトプット（目的）の違い</h4>
+
+<p>
+<strong>Actor-Critic: 最適な「行動ルール（方策：Policy）」を手に入れる</strong>
+
+<p style="padding-left:4em;">
+目的は「データを作ること」ではなく、「どんな状況（状態）に陥っても、常に最適な判断・行動ができるルール」を確立することです。自動運転の制御や、ゲームのAIプレイヤーの構築などがゴールです。
+</p>
+
+<p>
+<strong>GAN: 本物そっくりの「データ（画像・音声など）」を手に入れる</strong>
+</p>
+
+<p style="padding-left:4em;">
+目的は「行動の最適化」ではなく、「実在しないけれど、本物に見えるリアルなコンテンツ」を新しく生成することです。AIイラストの生成や、音声合成などがゴールです。
+</p>
+
+    </body>
+</html>
