@@ -38,6 +38,10 @@
 　<a href="https://boyoyon.github.io/Somewhat_Similar/data/moe_router_policy.html">MoEルーターと強化学習エージェントのポリシー</a>
 </p>
 
+<p>
+　<a href="https://boyoyon.github.io/Somewhat_Similar/data/monofact_rates_plenoptic_stereo.html">LLM の科学的発見能力とプレノプティック・カメラ</a>
+</p>
+
 <h3>か</h3>
 
 
